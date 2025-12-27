@@ -1,0 +1,71 @@
+T8E28 000:009.738   SEGGER J-Link V7.82 Log File
+T8E28 000:010.205   DLL Compiled: Oct 13 2022 13:32:51
+T8E28 000:010.215   Logging started @ 2025-11-05 10:02
+T8E28 000:010.227 - 10.234ms
+T8E28 000:010.248 JLINK_SetWarnOutHandler(...)
+T8E28 000:010.259 - 0.014ms
+T8E28 000:010.271 JLINK_OpenEx(...)
+T8E28 000:015.125   Firmware: J-Link V9 compiled May  7 2021 16:26:12
+T8E28 000:016.001   Firmware: J-Link V9 compiled May  7 2021 16:26:12
+T8E28 000:016.254   Decompressing FW timestamp took 183 us
+T8E28 000:026.454   Hardware: V9.40
+T8E28 000:026.488   S/N: 69409646
+T8E28 000:026.500   OEM: SEGGER
+T8E28 000:026.511   Feature(s): RDI, GDB, FlashDL, FlashBP, JFlash
+T8E28 000:028.238   TELNET listener socket opened on port 19021
+T8E28 000:028.473   WEBSRV WEBSRV_Init(): Starting webserver thread(s)
+T8E28 000:028.672   WEBSRV Webserver running on local port 19080
+T8E28 000:048.279 - 38.041ms returns "O.K."
+T8E28 000:048.354 JLINK_GetEmuCaps()
+T8E28 000:048.364 - 0.013ms returns 0xB9FF7BBF
+T8E28 000:048.377 JLINK_TIF_GetAvailable(...)
+T8E28 000:048.649 - 0.300ms
+T8E28 000:048.695 JLINK_SetErrorOutHandler(...)
+T8E28 000:048.703 - 0.012ms
+T8E28 000:048.742 JLINK_ExecCommand("ProjectFile = "G:\final-board\MDK-ARM\JLinkSettings.ini"", ...). 
+T8E28 000:067.854 - 19.129ms returns 0x00
+T8E28 000:070.830 JLINK_ExecCommand("Device = STM32F407IGHx", ...). 
+T8E28 000:074.367   Device "STM32F407IG" selected.
+T8E28 000:075.482 - 4.633ms returns 0x00
+T8E28 000:075.503 JLINK_ExecCommand("DisableConnectionTimeout", ...). 
+T8E28 000:075.516 - 0.005ms returns 0x01
+T8E28 000:075.526 JLINK_GetHardwareVersion()
+T8E28 000:075.535 - 0.012ms returns 94000
+T8E28 000:075.549 JLINK_GetDLLVersion()
+T8E28 000:075.557 - 0.011ms returns 78200
+T8E28 000:075.566 JLINK_GetOEMString(...)
+T8E28 000:075.576 JLINK_GetFirmwareString(...)
+T8E28 000:075.584 - 0.011ms
+T8E28 000:081.835 JLINK_GetDLLVersion()
+T8E28 000:081.855 - 0.024ms returns 78200
+T8E28 000:081.865 JLINK_GetCompileDateTime()
+T8E28 000:081.873 - 0.011ms
+T8E28 000:088.367 JLINK_GetFirmwareString(...)
+T8E28 000:088.400 - 0.037ms
+T8E28 000:091.236 JLINK_GetHardwareVersion()
+T8E28 000:091.261 - 0.029ms returns 94000
+T8E28 000:093.491 JLINK_GetSN()
+T8E28 000:093.514 - 0.027ms returns 69409646
+T8E28 000:095.958 JLINK_GetOEMString(...)
+T8E28 000:101.559 JLINK_TIF_Select(JLINKARM_TIF_SWD)
+T8E28 000:102.539 - 0.987ms returns 0x00
+T8E28 000:102.555 JLINK_HasError()
+T8E28 000:102.581 JLINK_SetSpeed(5000)
+T8E28 000:102.708 - 0.131ms
+T8E28 000:102.720 JLINK_GetId()
+T8E28 000:105.601   InitTarget() start
+T8E28 000:105.664    J-Link Script File: Executing InitTarget()
+T8E28 000:196.380   Can not attach to CPU. Trying connect under reset.
+T8E28 000:341.168   Connecting to CPU via connect under reset failed.
+T8E28 000:397.563   InitTarget() end
+T8E28 000:401.057   Connect failed. Resetting via Reset pin and trying again.
+T8E28 000:468.105   InitTarget() start
+T8E28 000:468.164    J-Link Script File: Executing InitTarget()
+T8E28 000:563.657   Can not attach to CPU. Trying connect under reset.
+T8E28 000:704.519   Connecting to CPU via connect under reset failed.
+T8E28 000:758.140   InitTarget() end
+T8E28 000:758.174 - 655.457ms returns 0x00000000
+T8E28 004:299.806 JLINK_Close()
+T8E28 004:317.375 - 17.602ms
+T8E28 004:317.414   
+T8E28 004:317.424   Closed
