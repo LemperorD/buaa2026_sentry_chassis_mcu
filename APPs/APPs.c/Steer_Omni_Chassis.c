@@ -13,7 +13,7 @@
 Steer_Omni_Data_t Steer_Omni_Data;
 int8_t dirt[2] = {-1,1};
 positionpid_t chassis_follow;
-int8_t follow;
+int8_t follow=1;
 int32_t flag_angletocloud=0;
 int32_t flag_Angle_ChassisToCloud=0;
 int32_t flag_angle_hd=0;
@@ -62,7 +62,7 @@ void Chassis_Init(void)
     //ת����λ�û���ʼ��
 		Position_PIDInit(&(M6020s_Chassis1.l_pid_object),0.5f, 0.000001f, 0.05, 0, 30000, 10000 ,10000);
 		Position_PIDInit(&(M6020s_Chassis2.l_pid_object),0.5f, 0.000001f, 0.05, 0, 30000, 10000 ,10000);
-    Position_PIDInit(&(chassis_follow), 12.0f, 0.001f, 4.0f, 0, 30000, 10000 , 6000);
+    Position_PIDInit(&(chassis_follow), 0.35f, 0.0000005f, 0.05f, 0, 1000, 10000 , 6000);
     M3508_Array[0].targetSpeed = 0.0f;
     M3508_Array[1].targetSpeed = 0.0f;
     M3508_Array[2].targetSpeed = 0.0f;
@@ -164,7 +164,7 @@ void chassis_follow_mode_chassis(float angle, uint8_t start_flag)
 
 void choose_UpperComorDT7(void)
 {
-	if(choose_UpperComorDT7_flag==1)
+	if(choose_UpperComorDT7_flag)
 	{
 		Set_Chassis_Speed_From_UpperCom();
 	}
