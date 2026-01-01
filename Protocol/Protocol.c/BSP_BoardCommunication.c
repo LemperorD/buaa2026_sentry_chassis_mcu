@@ -32,7 +32,7 @@ extern Saber_Angle_t Saber_Angle;
 //	uint8_t IT_keycommand[8]={0};
 //	uint8_t data[8] = {0};
 
-//	// �ֱ���yaw��Ƕȣ�Saber��pitch��Ƕȣ���һ���ĵ��٣�װ����ɫ
+//	// �ֱ���yaw��Ƕȣ�Saber��pitch��Ƕȣ���һ���ĵ��٣�װ�����?
 //	data[0] = ControlMes.yaw_realAngle >> 8;
 //	data[1] = ControlMes.yaw_realAngle;	
 //	data[2] = ControlMes.Blood_Volume >> 8;
@@ -45,9 +45,9 @@ extern Saber_Angle_t Saber_Angle;
 //	
 //	data[7] = (uint8_t)J6006s_Yaw.realAngle6006;  // ?YAW?????8?
 //	
-//	//ͼ������ӳ�䣬�ֱ������x�ᡢy�ᡢz�ᣨz���ǹ��֣���������Ҽ�����ʱֻ����������Ϣ
+//	//ͼ������ӳ�䣬�ֱ������x�ᡢy�ᡢz�ᣨz���ǹ��֣���������Ҽ�����ʱֻ�����������?
 //	//��ֻ̨��Ҫ���ٿأ�������ϰ����ʱ��Ҫ��չIT_keycommand[8]��IT_keycommand[12]������λֱ�Ӹ�0����
-//	//����������ң��������ӳ��ĸ�ʽһ��
+//	//����������ң��������ӳ��ĸ�ʽһ��?
 //	//	IT_keycommand[0] = ext_robot_keycommand.data.mouse_x >> 8;
 //	//	IT_keycommand[1] = ext_robot_keycommand.data.mouse_x;
 //	//	IT_keycommand[2] = ext_robot_keycommand.data.mouse_y >> 8;
@@ -67,7 +67,7 @@ void Board2_To_1(void)
 	uint8_t data[8] = {0};
     uint8_t data2[8] = {0};
 
-	//�������
+	//�������?
 	data[0] = ControlMes.yaw_realAngle >> 8;
 	data[1] = ControlMes.yaw_realAngle;	
 	data[2] = ControlMes.Blood_Volume >> 8;
@@ -83,12 +83,8 @@ void Board2_To_1(void)
     //��������
     Can_Fun.CAN_SendData(CAN_SendHandle, &hcan2, CAN_ID_STD, CAN_ID_GIMBAL, data);
 
-    //�������
-		uint32_t temp_angle = (uint32_t)Big_Yaw_Angle; 
-    data2[0] = (temp_angle & 0xFF000000) >> 24;
-    data2[1] = (temp_angle & 0x00FF0000) >> 16;
-    data2[2] = (temp_angle & 0x0000FF00) >> 8;
-    data2[3] = (temp_angle & 0x000000FF) >> 0;
+    //�������?
+    memcpy(data, &Big_Yaw_Angle, sizeof(float));
 
     //��������
     Can_Fun.CAN_SendData(CAN_SendHandle, &hcan2, CAN_ID_STD, CAN_ID_6006_BIG_YAW, data);
@@ -96,7 +92,7 @@ void Board2_To_1(void)
 
 
 /**
-  * @brief ����CAN���ݣ�ͬʱ�����ֱ�Ӹ�ֵ������
+  * @brief ����CAN���ݣ�ͬʱ�����ֱ�Ӹ�ֵ������?
   * @param RxMessage ���յ�������
   * @retval None
   */
@@ -105,13 +101,13 @@ void Board2_getChassisInfo(Can_Export_Data_t RxMessage)
     vx = (int16_t)(RxMessage.CANx_Export_RxMessage[0] << 8 | RxMessage.CANx_Export_RxMessage[1]);
     vy = (int16_t)(RxMessage.CANx_Export_RxMessage[2] << 8 | RxMessage.CANx_Export_RxMessage[3]);
     vw = (int16_t)(RxMessage.CANx_Export_RxMessage[4] << 8 | RxMessage.CANx_Export_RxMessage[5]);
-    big_yaw_velocity = (int16_t)(RxMessage.CANx_Export_RxMessage[6] << 8 | RxMessage.CANx_Export_RxMessage[7]);//大YAW目标角度
+    big_yaw_velocity = (int16_t)(RxMessage.CANx_Export_RxMessage[6] << 8 | RxMessage.CANx_Export_RxMessage[7]);//�?YAW�?标�?�度
 
     Steer_Omni_Data.Speed_ToCloud.vx = vx; //前进速度
     Steer_Omni_Data.Speed_ToCloud.vy = vy; //平移速度
     Steer_Omni_Data.Speed_ToCloud.wz = vw / 100; //旋转
 
-    // 仅在遥控模式 + 大YAW模式下使用大YAW目标角度数据
+    // 仅在遥控模式 + �?YAW模式下使用大YAW�?标�?�度数据
     if(!ControlMes.AutoAimFlag && ControlMes.yaw_choose == BIG_YAW_MODE)
     {
         Cloud.Target_Yaw += big_yaw_velocity * 0.02f; // 手动控制

@@ -1,9 +1,9 @@
 draftofomniwheel\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/tasks.c
-draftofomniwheel\tasks.o: G:\STEM32\keil5\core\ARM\ARMCC\Bin\..\include\stdlib.h
-draftofomniwheel\tasks.o: G:\STEM32\keil5\core\ARM\ARMCC\Bin\..\include\string.h
+draftofomniwheel\tasks.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdlib.h
+draftofomniwheel\tasks.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\string.h
 draftofomniwheel\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-draftofomniwheel\tasks.o: G:\STEM32\keil5\core\ARM\ARMCC\Bin\..\include\stddef.h
-draftofomniwheel\tasks.o: G:\STEM32\keil5\core\ARM\ARMCC\Bin\..\include\stdint.h
+draftofomniwheel\tasks.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
+draftofomniwheel\tasks.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
 draftofomniwheel\tasks.o: ../Core/Inc/FreeRTOSConfig.h
 draftofomniwheel\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 draftofomniwheel\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

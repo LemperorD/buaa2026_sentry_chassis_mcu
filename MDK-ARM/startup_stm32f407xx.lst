@@ -850,10 +850,9 @@ ARM Macro Assembler    Page 14
 
 
 artup_stm32f407xx.o -I../Core/Inc -I../Drivers/CMSIS/Include -I.\RTE\_DraftOfOm
-niWheel -IG:\STEM32\keil5\packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include --predefine=
-"__UVISION_VERSION SETA 538" --predefine="_RTE_ SETA 1" --predefine="STM32F407x
-x SETA 1" --predefine="_RTE_ SETA 1" --list=startup_stm32f407xx.lst startup_stm
-32f407xx.s
+niWheel -IG:\Software2\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include --predefine
+="__UVISION_VERSION SETA 543" --predefine="STM32F407xx SETA 1" --predefine="_RT
+E_ SETA 1" --list=startup_stm32f407xx.lst startup_stm32f407xx.s
 
 
 
