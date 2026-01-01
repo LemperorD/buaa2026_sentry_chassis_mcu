@@ -360,6 +360,21 @@
           <WinNumber>2</WinNumber>
           <ItemText>Setup_Angleoffset</ItemText>
         </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>RC_CtrlData.wheel</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>Steer_Omni_Data.Speed_ToChassis.wz</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>Steer_Omni_Data.Speed_ToCloud</ItemText>
+        </Ww>
       </WatchWindow2>
       <MemoryWindow4>
         <Mm>
@@ -1778,7 +1793,7 @@
 
   <Group>
     <GroupName>Debug Assist</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

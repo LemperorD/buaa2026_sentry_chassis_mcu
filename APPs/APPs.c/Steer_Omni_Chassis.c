@@ -187,7 +187,7 @@ void choose_UpperComorDT7(void)
 	else
 	{
 		v_cloud_convertto_chassis(Steer_Omni_Data.Angle_ChassisToCloud);  //遥控器控制模式下的底盘速度设定
-	  chassis_follow_mode_chassis(Steer_Omni_Data.Angle_ChassisToCloud,follow);
+	  //chassis_follow_mode_chassis(Steer_Omni_Data.Angle_ChassisToCloud,follow);
 	}
 }
 

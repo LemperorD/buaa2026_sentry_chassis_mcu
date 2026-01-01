@@ -27,11 +27,17 @@ Project File Date:  01/01/2026
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'DraftOfOmniWheel'
-compiling Cloud_Control.c...
+compiling Steer_Omni_Chassis.c...
+..\APPs\APPs.c\Steer_Omni_Chassis.c(88): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      Steer_Omni_Data.Speed_ToChassis.wz =Steer_Omni_Data.Speed_ToCloud.wz*0.6;
+..\APPs\APPs.c\Steer_Omni_Chassis.c(276): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      wheel_rpm_ratio = 60.0f  / 
+HEEL_PERIMETER * 
+..\APPs\APPs.c\Steer_Omni_Chassis.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=69404 RO-data=3692 RW-data=1016 ZI-data=46984  
+Program Size: Code=69252 RO-data=3692 RW-data=1016 ZI-data=46984  
 FromELF: creating hex file...
-"DraftOfOmniWheel\DraftOfOmniWheel.axf" - 0 Error(s), 0 Warning(s).
+"DraftOfOmniWheel\DraftOfOmniWheel.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
