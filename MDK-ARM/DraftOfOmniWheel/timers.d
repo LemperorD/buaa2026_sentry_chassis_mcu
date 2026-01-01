@@ -1,8 +1,8 @@
 draftofomniwheel\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/timers.c
-draftofomniwheel\timers.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdlib.h
+draftofomniwheel\timers.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 draftofomniwheel\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-draftofomniwheel\timers.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
-draftofomniwheel\timers.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
+draftofomniwheel\timers.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+draftofomniwheel\timers.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 draftofomniwheel\timers.o: ../Core/Inc/FreeRTOSConfig.h
 draftofomniwheel\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 draftofomniwheel\timers.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

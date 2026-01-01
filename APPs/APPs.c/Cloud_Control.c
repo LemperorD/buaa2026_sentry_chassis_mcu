@@ -142,14 +142,14 @@ void Cloud_Yaw_Angle_Set(void)
 	Big_Yaw_Angle=J6006s_Yaw.realAngle6006 - Saber_Angle.Yaw /360.0f *8192.0f ;
 	float diff = Angle_Yaw_Real - chassis_yaw_last;
 	if(diff < -4096.0f) {
-        chassis_turns++; // ????€??
+        chassis_turns++; // ????ï¿½??
     }
     // ?? 10 -> 8190, diff ??? +8180 (??? +4096)
     else if (diff > 4096.0f) {
-        chassis_turns--; // ????€??
+        chassis_turns--; // ????ï¿½??
     }
 	chassis_yaw_unwrapped = Angle_Yaw_Real + chassis_turns * 8192.0f;
-    chassis_yaw_last = Angle_Yaw_Real; // ?????????????€?????
+    chassis_yaw_last = Angle_Yaw_Real; // ?????????????ï¿½?????
 //	float Angle_Err_Yaw =  J6006s_Yaw.realAngle - 1.011395*chassis_yaw_unwrapped;	          //????yaw??????????????????
 	float Angle_Err_Yaw =  J6006s_Yaw.realAngle6006 - chassis_yaw_unwrapped;
 	/*Err??-4096 ~ 8192+4096???Target? 0 ~ 8191??????????????Err? -4096 ~ 4096 */
@@ -228,7 +228,7 @@ void Cloud_Sport_Out(void)
 		{
 			Angle_Cloud -= 8192;
 		}
-	Steer_Omni_GetAngle((-1)*Angle_Cloud/8192.0f*360-30);
+	Steer_Omni_GetAngle((-1)*Angle_Cloud/8192.0f*360-150);
 }
 
 
