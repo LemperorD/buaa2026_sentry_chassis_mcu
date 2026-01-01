@@ -82,7 +82,7 @@ void DT7_Handle(void)
 			if(RC_CtrlData.rc.s2 == RC_SW_DOWN)
 			{
 				choose_UpperComorDT7_flag = 0;
-        Cloud.Target_Yaw += RC_CtrlData.rc.ch0 * 0.0005 * 25;				
+        Cloud.Target_Yaw += RC_CtrlData.rc.ch0 * 0.0005 * 35;				
 			}
 			else
 			{

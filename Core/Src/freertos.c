@@ -280,8 +280,8 @@ void ALL_Init(void const * argument)
 		    /**Yaw轴电机PID初始化**/
 //        Position_PIDInit(&J6006s_YawIPID, 0.02f, 0.001f, 1.3f, 0, 10, 4 , 2);
 //        Position_PIDInit(&J6006s_YawOPID, 0.02f, 0.000001f, 0.001f, 0, 20, 7 , 7);
-		 Position_PIDInit(&J6006s_YawIPID, 0.05f, 0.001f, 1.3f, 0, 10, 4 , 2);
-        Position_PIDInit(&J6006s_YawOPID, 0.03f, 0.000001f, 0.002f, 0, 20, 7 , 7);
+		 Position_PIDInit(&J6006s_YawIPID, 0.13f, 0.001f, 1.9f, 0, 10, 4 , 2);
+        Position_PIDInit(&J6006s_YawOPID, 0.06f, 0.000001f, 0.004f, 0, 20, 7 , 7);
 		    /**AimYaw电机PID初始化*/
         Position_PIDInit(&AutoAim_J6006s_YawIPID, 0.13f, 0.04f, 0.53f, 0.03f, 10, 4 ,2);
         Position_PIDInit(&AutoAim_J6006s_YawOPID, 0.01f, 0.000001f, 0.001f, 0, 20, 7 , 7);

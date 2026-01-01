@@ -13,6 +13,7 @@
 Steer_Omni_Data_t Steer_Omni_Data;
 int8_t dirt[2] = {-1,1};
 positionpid_t chassis_follow;
+positionpid_t cloud_follow;
 int8_t follow=1;
 int32_t flag_angletocloud=0;
 int32_t flag_Angle_ChassisToCloud=0;
@@ -62,7 +63,7 @@ void Chassis_Init(void)
     //ת����λ�û���ʼ��
 		Position_PIDInit(&(M6020s_Chassis1.l_pid_object),0.5f, 0.000001f, 0.05, 0, 30000, 10000 ,10000);
 		Position_PIDInit(&(M6020s_Chassis2.l_pid_object),0.5f, 0.000001f, 0.05, 0, 30000, 10000 ,10000);
-    Position_PIDInit(&(chassis_follow), 0.35f, 0.0000005f, 0.05f, 0, 1000, 10000 , 6000);
+    Position_PIDInit(&(chassis_follow), 0.20f, 0.0000005f, 0.04f, 0, 1000, 10000 , 6000);
     M3508_Array[0].targetSpeed = 0.0f;
     M3508_Array[1].targetSpeed = 0.0f;
     M3508_Array[2].targetSpeed = 0.0f;
@@ -87,6 +88,38 @@ void v_cloud_convertto_chassis(fp32 angle)
     Steer_Omni_Data.Speed_ToChassis.wz =Steer_Omni_Data.Speed_ToCloud.wz*0.6;
 }
 
+/**
+ * @brief ���̸���ģʽ
+ * @param angle ��̨����ڵ��̵ĽǶ�
+ * @param ����Ϊ1
+ * @param kp
+ * @retval ????????????????
+ */
+void chassis_follow_mode_chassis(float angle, uint8_t start_flag)
+{
+    if(start_flag)
+    {
+			//使底盘转动到正方向对应的编码值在云台对应的位置
+        if(fabs(angle)<10)
+        {
+            return ;
+        }
+        Steer_Omni_Data.Speed_ToChassis.wz  +=  Angle_PID(&chassis_follow, 0, angle,360);
+    }
+}
+void cloud_follow_mode_chassis(float angle, uint8_t start_flag)
+{
+    if(start_flag)
+    {
+			//使云台跟着底盘转动
+        if(fabs(angle)<10)
+        {
+            return ;
+        }
+        Cloud.Target_Yaw  +=  Angle_PID(&cloud_follow, 0, angle,360);
+    }
+}
+
 
 /**
  * @brief 根据上位机传递的速度信息和模式，设置底盘目标速度
@@ -103,6 +136,7 @@ void Set_Chassis_Speed_From_UpperCom(void)
             Steer_Omni_Data.Speed_ToChassis.vx = chassis_coordinate_vx;
             Steer_Omni_Data.Speed_ToChassis.vy = chassis_coordinate_vy;
             Steer_Omni_Data.Speed_ToChassis.wz = chassis_coordinate_vz;
+				    cloud_follow_mode_chassis(Steer_Omni_Data.Angle_ChassisToCloud,follow);
             break;
             
         case SPINNING_MODE: // 小陀螺模式
@@ -142,25 +176,7 @@ void Set_Chassis_Speed_From_UpperCom(void)
     spinning_vz = Steer_Omni_Data.Speed_ToChassis.wz;
 }
 
-/**
- * @brief ���̸���ģʽ
- * @param angle ��̨����ڵ��̵ĽǶ�
- * @param ����Ϊ1
- * @param kp
- * @retval ????????????????
- */
-void chassis_follow_mode_chassis(float angle, uint8_t start_flag)
-{
-    if(start_flag)
-    {
-			//使底盘转动到正方向对应的编码值在云台对应的位置
-        if(fabs(angle)<10)
-        {
-            return ;
-        }
-        Steer_Omni_Data.Speed_ToChassis.wz  +=  Angle_PID(&chassis_follow, 0, angle,360);
-    }
-}
+
 
 void choose_UpperComorDT7(void)
 {
@@ -260,17 +276,17 @@ void move_motor_speed_set(void)
     wheel_rpm_ratio = 60.0f  / WHEEL_PERIMETER * M3508_RATIO*1.5 ;
 
     // ��ǰ���ٶȼ��㣺
-    Steer_Omni_Data.M3508_Setspeed[0] =((-1*Steer_Omni_Data.Speed_ToChassis.vx-Steer_Omni_Data.Speed_ToChassis.wz*Length_wheel_y/4)*cos(lf_omni_angle/180*pi)+
+    Steer_Omni_Data.M3508_Setspeed[0] =1.5*((-1*Steer_Omni_Data.Speed_ToChassis.vx-Steer_Omni_Data.Speed_ToChassis.wz*Length_wheel_y/4)*cos(lf_omni_angle/180*pi)+
                     (Steer_Omni_Data.Speed_ToChassis.vy+Steer_Omni_Data.Speed_ToChassis.wz*Length_wheel_x/2)*sin(lf_omni_angle/180*pi)) * wheel_rpm_ratio; 
     //������ٶȼ���
 
-    Steer_Omni_Data.M3508_Setspeed[1] = dirt[0] * sqrt( pow(((Steer_Omni_Data.Speed_ToChassis).vy - (Steer_Omni_Data.Speed_ToChassis).wz/2 * Radius * 0.6711f),2) + 
+    Steer_Omni_Data.M3508_Setspeed[1] = 1.5*dirt[0] * sqrt( pow(((Steer_Omni_Data.Speed_ToChassis).vy - (Steer_Omni_Data.Speed_ToChassis).wz/2 * Radius * 0.6711f),2) + 
                     pow(((Steer_Omni_Data.Speed_ToChassis).vx - (Steer_Omni_Data.Speed_ToChassis).wz/2 * Radius * 0.7415f),2)) * wheel_rpm_ratio ;
 
-    Steer_Omni_Data.M3508_Setspeed[2] = dirt[1] * sqrt( pow(((Steer_Omni_Data.Speed_ToChassis).vy - (Steer_Omni_Data.Speed_ToChassis).wz/2 * Radius * 0.6711f),2) + 
+    Steer_Omni_Data.M3508_Setspeed[2] = 1.5*dirt[1] * sqrt( pow(((Steer_Omni_Data.Speed_ToChassis).vy - (Steer_Omni_Data.Speed_ToChassis).wz/2 * Radius * 0.6711f),2) + 
                     pow(((Steer_Omni_Data.Speed_ToChassis).vx + (Steer_Omni_Data.Speed_ToChassis).wz/2 * Radius * 0.7415f),2)) * wheel_rpm_ratio ;
     // ��ǰ���ٶȼ��㣺
-    Steer_Omni_Data.M3508_Setspeed[3] = ((-1*Steer_Omni_Data.Speed_ToChassis.vx+Steer_Omni_Data.Speed_ToChassis.wz*Length_wheel_y/4)*cos(rf_omni_angle/180*pi)+
+    Steer_Omni_Data.M3508_Setspeed[3] = 1.5*((-1*Steer_Omni_Data.Speed_ToChassis.vx+Steer_Omni_Data.Speed_ToChassis.wz*Length_wheel_y/4)*cos(rf_omni_angle/180*pi)+
                     (Steer_Omni_Data.Speed_ToChassis.vy+Steer_Omni_Data.Speed_ToChassis.wz*Length_wheel_x/4)*sin(rf_omni_angle/180*pi)) * wheel_rpm_ratio; 
 
 }
