@@ -54,6 +54,16 @@ int32_t flag_Angle_Cloud=0;
 Cloud_FUN_t Cloud_FUN = Cloud_FUNGroundInit;
 #undef Cloud_FUNGroundInit
 
+float wrap8192(float x) {
+	while (x > 8192) {
+		x -= 8192;
+	}
+	while (x < 0) {
+		x += 8192;
+	}
+	return x;
+}
+
 /**
  * @brief ???????g?
  * @param angle ???????????L??
@@ -139,7 +149,7 @@ void Cloud_Yaw_Angle_Set(void)
 	
 	/**************************Yaw???????????o????????????????????????*****************/
 	float Angle_Yaw_Real = Saber_Angle.Yaw /360.0f *  8192.0f ;/* 8192/360*/  //??????yaw??????????????????
-	Big_Yaw_Angle=J6006s_Yaw.realAngle6006 - Saber_Angle.Yaw /360.0f *8192.0f ;
+	Big_Yaw_Angle = wrap8192(J6006s_Yaw.realAngle6006 - Saber_Angle.Yaw /360.0f *8192.0f);
 	float diff = Angle_Yaw_Real - chassis_yaw_last;
 	if(diff < -4096.0f) {
         chassis_turns++; // ????�??
@@ -173,8 +183,8 @@ void Cloud_Yaw_Angle_Set(void)
 
 	/*???????????????????????????????????????*/ /*Target_xxx????????*/
 
-	if(ControlMes.AutoAimFlag==0)
-	{
+	// if(ControlMes.AutoAimFlag==0)
+	// {
 					/*??????*/
 			if(Delta_Yaw < 10 && Delta_Yaw > -10)
 			{
@@ -190,13 +200,13 @@ void Cloud_Yaw_Angle_Set(void)
 			J6006s_Yaw.outTorque = Position_PID_Yaw(&J6006s_YawIPID, &FuzzyPID_Yaw, J6006s_Yaw.outSpeed, J6006s_Yaw.realSpeed);
 			J6006s_Yaw.outTorque = One_Kalman_Filter(&Cloud_YawCurrent_Kalman_manul, J6006s_Yaw.outTorque);
 			time ++;
-	}
-	else if(ControlMes.AutoAimFlag==1)
-	{
-		  J6006s_Yaw.outSpeed = Position_PID(&AutoAim_J6006s_YawOPID,  0 ,Delta_Yaw);	
-      J6006s_Yaw.outTorque = Position_PID_Yaw(&AutoAim_J6006s_YawIPID, &FuzzyPID_AimYaw, J6006s_Yaw.outSpeed, J6006s_Yaw.realSpeed);
-		  J6006s_Yaw.outTorque = One_Kalman_Filter(&Cloud_YawCurrent_Kalman, J6006s_Yaw.outTorque);
-	}
+	// }
+	// else if(ControlMes.AutoAimFlag==1)
+	// {
+	// 	  J6006s_Yaw.outSpeed = Position_PID(&AutoAim_J6006s_YawOPID,  0 ,Delta_Yaw);	
+    //   J6006s_Yaw.outTorque = Position_PID_Yaw(&AutoAim_J6006s_YawIPID, &FuzzyPID_AimYaw, J6006s_Yaw.outSpeed, J6006s_Yaw.realSpeed);
+	// 	  J6006s_Yaw.outTorque = One_Kalman_Filter(&Cloud_YawCurrent_Kalman, J6006s_Yaw.outTorque);
+	// }
 }
 /**
   * @brief  M6020?????????

@@ -1,8 +1,8 @@
 draftofomniwheel\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
-draftofomniwheel\heap_4.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+draftofomniwheel\heap_4.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdlib.h
 draftofomniwheel\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-draftofomniwheel\heap_4.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-draftofomniwheel\heap_4.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+draftofomniwheel\heap_4.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
+draftofomniwheel\heap_4.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
 draftofomniwheel\heap_4.o: ../Core/Inc/FreeRTOSConfig.h
 draftofomniwheel\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 draftofomniwheel\heap_4.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
