@@ -186,19 +186,19 @@ void Cloud_Yaw_Angle_Set(void)
 	// if(ControlMes.AutoAimFlag==0)
 	// {
 					/*??????*/
-			if(Delta_Yaw < 10 && Delta_Yaw > -10)
-			{
-				Delta_Yaw = 0;
-			}
+			// if(Delta_Yaw < 10 && Delta_Yaw > -10)
+			// {
+			// 	Delta_Yaw = 0;
+			// }
 			/*??????????*/
-		  Delta_Yaw = One_Kalman_Filter(&Cloud_YawMotorAngle_Error_Kalman, Delta_Yaw);
+		//   Delta_Yaw = One_Kalman_Filter(&Cloud_YawMotorAngle_Error_Kalman, Delta_Yaw);
 			if( time >= kk )
 			{
 				J6006s_Yaw.outSpeed = Position_PID(&J6006s_YawOPID,  0 ,Delta_Yaw);	
 				time = 0;
 			}
 			J6006s_Yaw.outTorque = Position_PID_Yaw(&J6006s_YawIPID, &FuzzyPID_Yaw, J6006s_Yaw.outSpeed, J6006s_Yaw.realSpeed);
-			J6006s_Yaw.outTorque = One_Kalman_Filter(&Cloud_YawCurrent_Kalman_manul, J6006s_Yaw.outTorque);
+			// J6006s_Yaw.outTorque = One_Kalman_Filter(&Cloud_YawCurrent_Kalman_manul, J6006s_Yaw.outTorque);
 			time ++;
 	// }
 	// else if(ControlMes.AutoAimFlag==1)
@@ -217,19 +217,19 @@ void Cloud_Yaw_Angle_Set(void)
 void Cloud_Sport_Out(void)
 {
 	    /**********?????????????????????**********/
-		if(ControlMes.modelFlag == model_Record)
-		{
-			J6006s_Yaw.InfoUpdateFrame = 0;
-			return;
-		}
-		else if(J6006s_Yaw.InfoUpdateFlag == 1)
-		{
+		// if(ControlMes.modelFlag == model_Record)
+		// {
+		// 	J6006s_Yaw.InfoUpdateFrame = 0;
+		// 	return;
+		// }
+		// else if(J6006s_Yaw.InfoUpdateFlag == 1)
+		// {
 			Cloud_FUN.Cloud_Yaw_Angle_Set();
-		}
-		else
-		{
-			return;
-		}
+		// }
+		// else
+		// {
+		// 	return;
+		// }
 	/**********??????Yaw?????????????**********/
 	  float Angle_Cloud = J6006s_Yaw.realAngle6006;
 		Angle_Cloud = J6006s_Yaw.realAngle6006 +Setup_Angleoffset;

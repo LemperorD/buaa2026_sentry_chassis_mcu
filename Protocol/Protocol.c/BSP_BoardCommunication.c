@@ -140,13 +140,12 @@ void Board2_getGimbalInfo(Can_Export_Data_t RxMessage)
 
     ControlMes.fric_Flag   = (uint8_t)(RxMessage.CANx_Export_RxMessage[3] >> 0) & 0x01;  // ?0:?????
     // ControlMes.AutoAimFlag = (uint8_t)(RxMessage.CANx_Export_RxMessage[3] >> 1) & 0x01;  // ?1:????
-    ControlMes.change_Flag = (uint8_t)(RxMessage.CANx_Export_RxMessage[3] >> 2) & 0x01;  // ?2:???????
-    ControlMes.modelFlag   = (uint8_t)(RxMessage.CANx_Export_RxMessage[3] >> 3) & 0x01;  // ?3:??????
+    // ControlMes.change_Flag = (uint8_t)(RxMessage.CANx_Export_RxMessage[3] >> 2) & 0x01;  // ?2:???????
+    // ControlMes.modelFlag   = (uint8_t)(RxMessage.CANx_Export_RxMessage[3] >> 3) & 0x01;  // ?3:??????
     // ControlMes.yaw_choose  = (uint8_t)(RxMessage.CANx_Export_RxMessage[3] >> 5) & 0x03;  // ?5-6:??YAW??
     // uint8_t cloud_mode = (uint8_t)(RxMessage.CANx_Export_RxMessage[3] >> 6) & 0x01;
     
     int16_t big_yaw_enemy_x = (int16_t)(RxMessage.CANx_Export_RxMessage[4] << 8 | RxMessage.CANx_Export_RxMessage[5]);
-    
     int16_t big_yaw_enemy_y = (int16_t)(RxMessage.CANx_Export_RxMessage[6] << 8 | RxMessage.CANx_Export_RxMessage[7]);
     
     big_yaw_ememy_position[0] = big_yaw_enemy_x;
