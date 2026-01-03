@@ -1,7 +1,7 @@
 draftofomniwheel\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/croutine.c
 draftofomniwheel\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-draftofomniwheel\croutine.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
-draftofomniwheel\croutine.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
+draftofomniwheel\croutine.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+draftofomniwheel\croutine.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 draftofomniwheel\croutine.o: ../Core/Inc/FreeRTOSConfig.h
 draftofomniwheel\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 draftofomniwheel\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

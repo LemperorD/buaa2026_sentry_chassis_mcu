@@ -20,7 +20,7 @@
 
 /**
   * @Data   2021-03-28
-  * @brief  can1½ÓÊÕÈÎÎñ
+  * @brief  can1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param  void
   * @retval void
   */
@@ -35,7 +35,7 @@ void Can1Receives(void const *argument)
 //      HAL_UART_Transmit(&huart6,"CAN1 Receive \n\r",sizeof("CAN1 Receive \n\r"),0xff);
         ID = Can_Export_Data.CAN_RxHeader.StdId;
 
-        //½ÓÊÕ µ×ÅÌµç»ú Ä¦²ÁÂÖµç»ú ²¦ÅÌµç»ú ·´À¡Êý¾Ý
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ï¿½ Ä¦ï¿½ï¿½ï¿½Öµï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (ID >= M3508M_READID_START && ID <= M3508M_READID_END)
         {
             M3508_FUN.M3508_getInfo(Can_Export_Data);
@@ -66,7 +66,7 @@ void Can1Receives(void const *argument)
 
 /**
   * @Data   2021-03-28
-  * @brief  can2½ÓÊÕÈÎÎñ
+  * @brief  can2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param  void
   * @retval void
   */
@@ -83,15 +83,15 @@ void Can2Receives(void const *argument)
         {
             M6020_Fun.M6020_getInfo(Can_Export_Data);
         }
-				        //½ÓÊÕÔÆÌ¨ yawÖáµç»ú  ·´À¡Êý¾Ý
+				        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ yawï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         else if (ID == J6006_READID_YAW)
         {
 					  DM_getInfo(Can_Export_Data , 6006,J6006_MaxP,J6006_MaxV,J6006_MaxT);
         }
-        //Board2½ÓÊÜBoard1Êý¾Ý
+        //Board2ï¿½ï¿½ï¿½ï¿½Board1ï¿½ï¿½ï¿½ï¿½
         else if (ID == CAN_ID_CHASSIS)
         {
-            Board2_FUN.Board2_getChassisInfo(Can_Export_Data);
+            // Board2_FUN.Board2_getChassisInfo(Can_Export_Data);
         }
         else if (ID == CAN_ID_GIMBAL)
         {

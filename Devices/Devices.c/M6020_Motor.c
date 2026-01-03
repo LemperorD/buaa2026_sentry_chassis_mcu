@@ -39,7 +39,7 @@ void M6020_Init(M6020s_t *motor, uint16_t _motor_id)
 	motor->totalAngle = 0;
 	motor->turnCount = 0;
 
-  motor->outCurrent = 0;
+    motor->outCurrent = 0;
 
 	motor->InfoUpdateFlag = 0;
 }
@@ -51,8 +51,6 @@ void M6020_Init(M6020s_t *motor, uint16_t _motor_id)
   */
  void M6020_setVoltage(int16_t uq1, int16_t uq2, int16_t uq3, int16_t uq4, uint8_t *data)
  {
-
-
  	data[0] = uq1 >> 8;
  	data[1] = uq1;
  	data[2] = uq2 >> 8;
@@ -61,8 +59,8 @@ void M6020_Init(M6020s_t *motor, uint16_t _motor_id)
  	data[5] = uq3;
  	data[6] = uq4 >> 8;
  	data[7] = uq4;
-
-// 	// CAN_SendData(&hcan1, CAN_ID_STD, M6020_SENDID, data);
+	
+	// CAN_SendData(&hcan1, CAN_ID_STD, M6020_SENDID, data);
  }
 
 /**

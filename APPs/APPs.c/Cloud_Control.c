@@ -238,7 +238,7 @@ void Cloud_Sport_Out(void)
 		{
 			Angle_Cloud -= 8192;
 		}
-	Steer_Omni_GetAngle((-1)*Angle_Cloud/8192.0f*360-150);
+	Steer_Omni_GetAngle((-1)*Angle_Cloud/8192.0f*360+30);
 }
 
 

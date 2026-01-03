@@ -1,7 +1,7 @@
 /**
  * @file PID.c
  * @author centre
- * @brief PID¿ØÖÆËã·¨ÊµÏÖÄ£¿é
+ * @brief PIDï¿½ï¿½ï¿½ï¿½ï¿½ã·¨Êµï¿½ï¿½Ä£ï¿½ï¿½
  * @version 0.2
  * @date 2025-08-21
  * @copyright Copyright (c) 2021
@@ -9,14 +9,14 @@
 
 #include "PID.h"
 
-One_Kalman_t Cloud_YAWODKalman; ///< YAWÖá¿¨¶ûÂüÂË²¨Æ÷ÊµÀý
-One_Kalman_t Cloud_PITCHODKalman; ///< PITCHÖá¿¨¶ûÂüÂË²¨Æ÷ÊµÀý
+One_Kalman_t Cloud_YAWODKalman; ///< YAWï¿½á¿¨ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½Êµï¿½ï¿½
+One_Kalman_t Cloud_PITCHODKalman; ///< PITCHï¿½á¿¨ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½ï¿½Êµï¿½ï¿½
 
 /**
- * @brief ¾ø¶ÔÖµÏÞÖÆº¯Êý
- * @param a Ö¸ÏòÒªÏÞÖÆµÄ¸¡µãÊýµÄÖ¸Õë
- * @param ABS_MAX ¾ø¶ÔÖµµÄ×î´óÏÞÖÆ
- * @note ´Ëº¯Êý»áÖ±½ÓÐÞ¸Ä´«ÈëµÄÖ¸ÕëÖµ
+ * @brief ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Æºï¿½ï¿½ï¿½
+ * @param a Ö¸ï¿½ï¿½Òªï¿½ï¿½ï¿½ÆµÄ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param ABS_MAX ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @note ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Þ¸Ä´ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Öµ
  */
 static void abs_limit(float *a, float ABS_MAX)
 {
@@ -27,47 +27,47 @@ static void abs_limit(float *a, float ABS_MAX)
 }
 
 /**
- * @brief YawÖáÄ£ºýÎ»ÖÃÊ½PID¿ØÖÆÆ÷
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @param fuzzy_t Ä£ºýPIDÊý¾Ý½á¹¹ÌåÖ¸Õë
- * @param target Ä¿±êÖµ
- * @param measured ²âÁ¿Öµ
- * @return PID¿ØÖÆÊä³öÖµ
- * @note ´Ëº¯Êý½áºÏÄ£ºý¿ØÖÆÓÅ»¯PID²ÎÊý£¬ÊÊÓÃÓÚYawÖá¿ØÖÆ
+ * @brief Yawï¿½ï¿½Ä£ï¿½ï¿½Î»ï¿½ï¿½Ê½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param fuzzy_t Ä£ï¿½ï¿½PIDï¿½ï¿½ï¿½Ý½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param target Ä¿ï¿½ï¿½Öµ
+ * @param measured ï¿½ï¿½ï¿½ï¿½Öµ
+ * @return PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+ * @note ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»ï¿½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Yawï¿½ï¿½ï¿½ï¿½ï¿½
  */
 float Position_PID_Yaw(positionpid_t *pid_t, FUZZYPID_Data_t *fuzzy_t, float target, float measured)
 {
-    // Ä£ºý¼ÆËã¸üÐÂPID²ÎÊý
+    // Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½
     FuzzyComputation(fuzzy_t, pid_t->err, pid_t->err_last);
     
-    // ¸üÐÂ×´Ì¬±äÁ¿
+    // ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
     pid_t->Target = (float)target;
     pid_t->Measured = (float)measured;
     pid_t->err = pid_t->Target - pid_t->Measured;
     pid_t->err_change = pid_t->err - pid_t->err_last;
     pid_t->error_target = pid_t->Target - pid_t->last_set_point;
 
-    // ¼ÆËã¸÷ÏîÊä³ö£¨Ê¹ÓÃÄ£ºýµ÷ÕûºóµÄ²ÎÊý£©
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->p_out = (pid_t->Kp + fuzzy_t->deta_kp) * pid_t->err;
     pid_t->i_out += (pid_t->Ki + fuzzy_t->date_ki) * pid_t->err;
     pid_t->d_out = (pid_t->Kd + fuzzy_t->date_kd) * (pid_t->Measured - pid_t->err_last);
     pid_t->f_out = pid_t->Kf * pid_t->error_target;
     
-    // »ý·Ö·ÖÀë²ßÂÔ
+    // ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if (pid_t->err >= pid_t->Integral_Separation) {
         pid_t->i_out = 0;
     } else {
-        // »ý·ÖÏÞ·ù
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
         abs_limit(&pid_t->i_out, pid_t->IntegralLimit);
     }
 
-    // ¼ÆËã×ÜÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->pwm = (pid_t->p_out + pid_t->i_out + pid_t->d_out + pid_t->f_out);
 
-    // Êä³öÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->pwm, pid_t->MaxOutput);
 
-    // ¸üÐÂÀúÊ·×´Ì¬
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê·×´Ì¬
     pid_t->err_last = pid_t->Measured;
     pid_t->last_set_point = pid_t->Target;
     
@@ -75,35 +75,35 @@ float Position_PID_Yaw(positionpid_t *pid_t, FUZZYPID_Data_t *fuzzy_t, float tar
 }
 
 /**
- * @brief ÔöÁ¿Ê½PID¿ØÖÆÆ÷
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @param target Ä¿±êÖµ
- * @param measured ²âÁ¿Öµ
- * @return PID¿ØÖÆÊä³öÖµ
- * @note ÊÊÓÃÓÚÐèÒªÆ½»¬¿ØÖÆµÄ³¡¾°
+ * @brief ï¿½ï¿½ï¿½ï¿½Ê½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param target Ä¿ï¿½ï¿½Öµ
+ * @param measured ï¿½ï¿½ï¿½ï¿½Öµ
+ * @return PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+ * @note ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÆ½ï¿½ï¿½ï¿½ï¿½ï¿½ÆµÄ³ï¿½ï¿½ï¿½
  */
 float Incremental_PID(incrementalpid_t *pid_t, float target, float measured)
 {
-    // ¸üÐÂ×´Ì¬±äÁ¿
+    // ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
     pid_t->Target = target;
     pid_t->Measured = measured;
     pid_t->err = pid_t->Target - pid_t->Measured;
 
-    // ¼ÆËã¸÷ÏîÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->p_out = pid_t->Kp * (pid_t->err - pid_t->err_last);
     pid_t->i_out = pid_t->Ki * pid_t->err;
     pid_t->d_out = pid_t->Kd * (pid_t->err - 2.0f * pid_t->err_last + pid_t->err_beforeLast);
 
-    // »ý·ÖÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->i_out, pid_t->IntegralLimit);
 
-    // ¼ÆËã×ÜÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->pwm += (pid_t->p_out + pid_t->i_out + pid_t->d_out);
 
-    // Êä³öÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->pwm, pid_t->MaxOutput);
 
-    // ¸üÐÂÀúÊ·×´Ì¬
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê·×´Ì¬
     pid_t->err_beforeLast = pid_t->err_last;
     pid_t->err_last = pid_t->err;
 
@@ -111,26 +111,26 @@ float Incremental_PID(incrementalpid_t *pid_t, float target, float measured)
 }
 
 /**
- * @brief ³õÊ¼»¯ÔöÁ¿Ê½PID¿ØÖÆÆ÷
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @param Kp ±ÈÀýÏµÊý
- * @param Ki »ý·ÖÏµÊý
- * @param Kd Î¢·ÖÏµÊý
- * @param MaxOutput ×î´óÊä³öÏÞÖÆ
- * @param IntegralLimit »ý·ÖÏîÏÞ·ùÖµ
+ * @brief ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param Kp ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
+ * @param Ki ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
+ * @param Kd Î¢ï¿½ï¿½Ïµï¿½ï¿½
+ * @param MaxOutput ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param IntegralLimit ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½Öµ
  */
 void Incremental_PIDInit(incrementalpid_t *pid_t, float Kp, float Ki, float Kd, uint32_t MaxOutput, uint32_t IntegralLimit)
 {
-    // ÉèÖÃPID²ÎÊý
+    // ï¿½ï¿½ï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½
     pid_t->Kp = Kp;
     pid_t->Ki = Ki;
     pid_t->Kd = Kd;
     
-    // ÉèÖÃÏÞÖÆ²ÎÊý
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½
     pid_t->MaxOutput = MaxOutput;
     pid_t->IntegralLimit = IntegralLimit;
     
-    // ³õÊ¼»¯×´Ì¬±äÁ¿
+    // ï¿½ï¿½Ê¼ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
     pid_t->p_out = 0;
     pid_t->d_out = 0;
     pid_t->i_out = 0;
@@ -143,9 +143,9 @@ void Incremental_PIDInit(incrementalpid_t *pid_t, float Kp, float Ki, float Kd, 
 }
 
 /**
- * @brief Çå³ýÔöÁ¿Ê½PID¿ØÖÆÆ÷Êý¾Ý
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @note ÖØÖÃËùÓÐ×´Ì¬±äÁ¿£¬±£Áô²ÎÊýÉèÖÃ
+ * @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @note ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 void Clear_IncrementalPIDData(incrementalpid_t *pid_t)
 {
@@ -161,38 +161,38 @@ void Clear_IncrementalPIDData(incrementalpid_t *pid_t)
 }
 
 /**
- * @brief Î»ÖÃÊ½PID¿ØÖÆÆ÷
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @param target Ä¿±êÖµ
- * @param measured ²âÁ¿Öµ
- * @return PID¿ØÖÆÊä³öÖµ
- * @note ±ê×¼Î»ÖÃÊ½PIDÊµÏÖ£¬´øÇ°À¡¿ØÖÆ
+ * @brief Î»ï¿½ï¿½Ê½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param target Ä¿ï¿½ï¿½Öµ
+ * @param measured ï¿½ï¿½ï¿½ï¿½Öµ
+ * @return PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+ * @note ï¿½ï¿½×¼Î»ï¿½ï¿½Ê½PIDÊµï¿½Ö£ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 float Position_PID(positionpid_t *pid_t, float target, float measured)
 {
-    // ¸üÐÂ×´Ì¬±äÁ¿
+    // ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
     pid_t->Target = (float)target;
     pid_t->Measured = (float)measured;
     pid_t->err = pid_t->Target - pid_t->Measured;
     pid_t->err_change = pid_t->Measured - pid_t->err_last;
     pid_t->error_target = pid_t->Target - pid_t->last_set_point;
     
-    // ¼ÆËã¸÷ÏîÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->p_out = pid_t->Kp * pid_t->err;
     pid_t->i_out += pid_t->Ki * pid_t->err;
     pid_t->d_out = pid_t->Kd * (pid_t->err - pid_t->err_last);
     pid_t->f_out = pid_t->Kf * pid_t->error_target;
     
-    // »ý·ÖÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->i_out, pid_t->IntegralLimit);
 
-    // ¼ÆËã×ÜÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->pwm = (pid_t->p_out + pid_t->i_out + pid_t->d_out + pid_t->f_out);
 
-    // Êä³öÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->pwm, pid_t->MaxOutput);
 
-    // ¸üÐÂÀúÊ·×´Ì¬
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê·×´Ì¬
     pid_t->err_last = pid_t->err;
     pid_t->last_set_point = pid_t->Target;
     
@@ -200,30 +200,30 @@ float Position_PID(positionpid_t *pid_t, float target, float measured)
 }
 
 /**
- * @brief ³õÊ¼»¯Î»ÖÃÊ½PID¿ØÖÆÆ÷
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @param Kp ±ÈÀýÏµÊý
- * @param Ki »ý·ÖÏµÊý
- * @param Kd Î¢·ÖÏµÊý
- * @param Kf Ç°À¡ÏµÊý
- * @param MaxOutput ×î´óÊä³öÏÞÖÆ
- * @param Integral_Separation »ý·Ö·ÖÀëãÐÖµ
- * @param IntegralLimit »ý·ÖÏîÏÞ·ùÖµ
+ * @brief ï¿½ï¿½Ê¼ï¿½ï¿½Î»ï¿½ï¿½Ê½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param Kp ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
+ * @param Ki ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
+ * @param Kd Î¢ï¿½ï¿½Ïµï¿½ï¿½
+ * @param Kf Ç°ï¿½ï¿½Ïµï¿½ï¿½
+ * @param MaxOutput ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param Integral_Separation ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+ * @param IntegralLimit ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½Öµ
  */
 void Position_PIDInit(positionpid_t *pid_t, float Kp, float Ki, float Kd, float Kf, float MaxOutput, float Integral_Separation, float IntegralLimit)
 {
-    // ÉèÖÃPID²ÎÊý
+    // ï¿½ï¿½ï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½
     pid_t->Kp = Kp;
     pid_t->Ki = Ki;
     pid_t->Kd = Kd;
     pid_t->Kf = Kf;
     
-    // ÉèÖÃÏÞÖÆ²ÎÊý
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½
     pid_t->MaxOutput = MaxOutput;
     pid_t->Integral_Separation = Integral_Separation;
     pid_t->IntegralLimit = IntegralLimit;
     
-    // ³õÊ¼»¯×´Ì¬±äÁ¿
+    // ï¿½ï¿½Ê¼ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
     pid_t->p_out = 0;
     pid_t->d_out = 0;
     pid_t->i_out = 0;
@@ -237,9 +237,9 @@ void Position_PIDInit(positionpid_t *pid_t, float Kp, float Ki, float Kd, float 
 }
 
 /**
- * @brief Çå³ýÎ»ÖÃÊ½PID¿ØÖÆÆ÷Êý¾Ý
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @note ÖØÖÃËùÓÐ×´Ì¬±äÁ¿£¬±£Áô²ÎÊýÉèÖÃ
+ * @brief ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ê½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @note ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 void Clear_PositionPIDData(positionpid_t *pid_t)
 {
@@ -255,22 +255,22 @@ void Clear_PositionPIDData(positionpid_t *pid_t)
 }
 
 /**
- * @brief ½Ç¶ÈÎ»ÖÃÊ½PID¿ØÖÆÆ÷
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @param target Ä¿±ê½Ç¶ÈÖµ
- * @param measured ²âÁ¿½Ç¶ÈÖµ
- * @param ecd_max ±»¿Øµç»ú±àÂëÆ÷×î´óÖµ£¨ÀýÈç8191¶ÔÓ¦360¶È£©
- * @return PID¿ØÖÆÊä³öÖµ
- * @note ×¨ÃÅ´¦Àíµç»ú½Ç¶ÈÖµµÄPID¿ØÖÆÆ÷£¬×Ô¶¯´¦Àí½Ç¶È»·ÈÆÎÊÌâ£¬±àÂëÖµÐèÒª´Ó0¿ªÊ¼
+ * @brief ï¿½Ç¶ï¿½Î»ï¿½ï¿½Ê½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param target Ä¿ï¿½ï¿½Ç¶ï¿½Öµ
+ * @param measured ï¿½ï¿½ï¿½ï¿½ï¿½Ç¶ï¿½Öµ
+ * @param ecd_max ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8191ï¿½ï¿½Ó¦360ï¿½È£ï¿½
+ * @return PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+ * @note ×¨ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¶ï¿½Öµï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¶È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â£¬ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Òªï¿½ï¿½0ï¿½ï¿½Ê¼
  */
 float Angle_PID(positionpid_t *pid_t, float target, float measured,float ecd_max)
 {
-    // ¸üÐÂ×´Ì¬±äÁ¿
+    // ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
     pid_t->Target = (float)target;
     pid_t->Measured = (float)measured;
     pid_t->err = pid_t->Target - pid_t->Measured;
     
-    // ´¦Àí½Ç¶È»·ÈÆÎÊÌâ£¨8192¶ÔÓ¦360¶È£©
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ç¶È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â£¨8192ï¿½ï¿½Ó¦360ï¿½È£ï¿½
     if(fabs(pid_t->err) > ecd_max/2) {
         if(pid_t->err > 0) {
             pid_t->err = pid_t->err - (ecd_max+1);
@@ -282,46 +282,47 @@ float Angle_PID(positionpid_t *pid_t, float target, float measured,float ecd_max
     pid_t->err_change = pid_t->Measured - pid_t->err_last;
     pid_t->error_target = pid_t->Target - pid_t->last_set_point;
     
-    // ¼ÆËã¸÷ÏîÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->p_out = pid_t->Kp * pid_t->err;
     pid_t->i_out += pid_t->Ki * pid_t->err;
     pid_t->d_out = pid_t->Kd * (pid_t->err - pid_t->err_last);
     pid_t->f_out = pid_t->Kf * pid_t->error_target;
     
-    // »ý·ÖÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->i_out, pid_t->IntegralLimit);
 
-    // ¼ÆËã×ÜÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->pwm = (pid_t->p_out + pid_t->i_out + pid_t->d_out + pid_t->f_out);
 
-    // Êä³öÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->pwm, pid_t->MaxOutput);
 
-    // ¸üÐÂÀúÊ·×´Ì¬
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê·×´Ì¬
     pid_t->err_last = pid_t->err;
     pid_t->last_set_point = pid_t->Target;
     
     return pid_t->pwm;
 }
+
 /**
- * @brief ÌØ¶¨Î»ÖÃ½µkp kdµÄPID¿ØÖÆÆ÷
- * @param pid_t PID¿ØÖÆÆ÷½á¹¹ÌåÖ¸Õë
- * @param speed_target Ä¿±êËÙ¶ÈÖµ
- * @param speed_measured ²âÁ¿ËÙ¶ÈÖµ
- * @param angle_measured ½Ç¶È²âÁ¿Öµ
- * @return PID¿ØÖÆÊä³öÖµ
- * @note ×¨ÃÅ´¦Àí6020µç»úÌØ¶¨½Ç¶ÈÖµ¶¶¶¯µÄËÙ¶È»·pidº¯Êý
+ * @brief ï¿½Ø¶ï¿½Î»ï¿½Ã½ï¿½kp kdï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param pid_t PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½Ö¸ï¿½ï¿½
+ * @param speed_target Ä¿ï¿½ï¿½ï¿½Ù¶ï¿½Öµ
+ * @param speed_measured ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½Öµ
+ * @param angle_measured ï¿½Ç¶È²ï¿½ï¿½ï¿½Öµ
+ * @return PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+ * @note ×¨ï¿½Å´ï¿½ï¿½ï¿½6020ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½Ç¶ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È»ï¿½pidï¿½ï¿½ï¿½ï¿½
  */
 float speed_angle_limit_pid(positionpid_t *pid_t, float speed_target, float speed_measured,float angle_measured)
 {
-// ¸üÐÂ×´Ì¬±äÁ¿
+// ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½
     pid_t->Target = (float)speed_target;
     pid_t->Measured = (float)speed_measured;
     pid_t->err = pid_t->Target - pid_t->Measured;
     pid_t->err_change = pid_t->Measured - pid_t->err_last;
     pid_t->error_target = pid_t->Target - pid_t->last_set_point;
     
-    // ¼ÆËã¸÷ÏîÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->p_out = pid_t->Kp * pid_t->err;
     pid_t->i_out += pid_t->Ki * pid_t->err;
     pid_t->d_out = pid_t->Kd * (pid_t->err - pid_t->err_last);
@@ -331,16 +332,16 @@ float speed_angle_limit_pid(positionpid_t *pid_t, float speed_target, float spee
 //        pid_t->p_out = 142 * pid_t->err;
 //        pid_t->d_out = 20 * (pid_t->err - pid_t->err_last);
 //    }
-    // »ý·ÖÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->i_out, pid_t->IntegralLimit);
 
-    // ¼ÆËã×ÜÊä³ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid_t->pwm = (pid_t->p_out + pid_t->i_out + pid_t->d_out + pid_t->f_out);
 
-    // Êä³öÏÞ·ù
+    // ï¿½ï¿½ï¿½ï¿½Þ·ï¿½
     abs_limit(&pid_t->pwm, pid_t->MaxOutput);
 
-    // ¸üÐÂÀúÊ·×´Ì¬
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê·×´Ì¬
     pid_t->err_last = pid_t->err;
     pid_t->last_set_point = pid_t->Target;
     

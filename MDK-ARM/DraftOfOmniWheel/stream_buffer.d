@@ -1,8 +1,8 @@
 draftofomniwheel\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
-draftofomniwheel\stream_buffer.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
-draftofomniwheel\stream_buffer.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\string.h
+draftofomniwheel\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+draftofomniwheel\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 draftofomniwheel\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-draftofomniwheel\stream_buffer.o: G:\Software2\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
+draftofomniwheel\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 draftofomniwheel\stream_buffer.o: ../Core/Inc/FreeRTOSConfig.h
 draftofomniwheel\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 draftofomniwheel\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

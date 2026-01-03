@@ -51,7 +51,7 @@ typedef  struct
 		int16_t ch3;
 		uint8_t s1;
 		uint8_t s2;
-	}rc;
+	} rc;
 	
 	struct
 	{
@@ -60,12 +60,12 @@ typedef  struct
 		int16_t z;
 		uint8_t press_l;
 		uint8_t press_r;
-	}mouse;
+	} mouse;
 	
 	struct
 	{
 		uint16_t v;
-	}key;
+	} key;
 	
 	int16_t wheel;
 	

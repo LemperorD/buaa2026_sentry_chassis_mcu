@@ -50,9 +50,10 @@ typedef struct
         float wz;
     } Speed_ToChassis;          //��������ϵ���ٶ�vx,vy,wz
 		
-		fp32 Angle_ChassisToCloud;
+	fp32 Angle_ChassisToCloud;
     int32_t M6020_Setposition[2]; //����������������λ��
     int16_t M3508_Setspeed[4];	  //�ĸ���������������ٶ�
+
 } Steer_Omni_Data_t;
 
 /********ȫ�ֱ�������********/
@@ -60,6 +61,7 @@ extern Steer_Omni_Data_t Steer_Omni_Data;
 extern int follow_flag;
 extern int8_t follow;
 extern int choose_UpperComorDT7_flag;
+
 /********��������********/
 fp64 Angle_Limit(fp64 angle,fp64 max);
 void Chassis_Init(void);
@@ -70,4 +72,4 @@ void chassis_target_calc(void);
 void Steer_Omni_Chassis_Out(void);
 void Steer_Omni_GetAngle(fp32 angle);
 
-#endif
+#endif // _STEER_OMNI_CHASSIS_H

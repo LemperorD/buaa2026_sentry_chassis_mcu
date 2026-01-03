@@ -19,17 +19,17 @@
 #include "PID.h"
 #include "BSP_Can.h"
 
-#define M6020_READID_START 0x206 //µ±IDÎª1Ê±µÄ±¨ÎÄID
+#define M6020_READID_START 0x206 //ï¿½ï¿½IDÎª1Ê±ï¿½Ä±ï¿½ï¿½ï¿½ID
 #define M6020_READID_END 0x207
-#define M6020_SENDID 0x1FF //1~4µÄµç»ú£¬0x2FFÎª5~7
+#define M6020_SENDID 0x1FF //1~4ï¿½Äµï¿½ï¿½ï¿½ï¿½0x2FFÎª5~7
 
-#define M6020_CurrentRatio 0f //´ý²â¶¨
-#define M6020_MaxOutput 30000 //·¢ËÍ¸øµç»úµÄ×î´ó¿ØÖÆÖµ
-#define M6020_mAngle 8191     //6020µÄ»úÐµ½Ç¶È×î´óÖµ0~8191¡£MachineAngle
+#define M6020_CurrentRatio 0f //ï¿½ï¿½ï¿½â¶¨
+#define M6020_MaxOutput 30000 //ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+#define M6020_mAngle 8191     //6020ï¿½Ä»ï¿½Ðµï¿½Ç¶ï¿½ï¿½ï¿½ï¿½Öµ0~8191ï¿½ï¿½MachineAngle
 
-#define M6020_mAngleRatio 22.7527f //»úÐµ½Ç¶ÈÓëÕæÊµ½Ç¶ÈµÄ±ÈÂÊ
+#define M6020_mAngleRatio 22.7527f //ï¿½ï¿½Ðµï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ç¶ÈµÄ±ï¿½ï¿½ï¿½
 
-#define M6020_getRoundAngle(rAngle) rAngle / M6020_mAngleRatio //»úÐµ½Ç¶ÈÓëÕæÊµ½Ç¶ÈµÄ±ÈÂÊ
+#define M6020_getRoundAngle(rAngle) rAngle / M6020_mAngleRatio //ï¿½ï¿½Ðµï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ç¶ÈµÄ±ï¿½ï¿½ï¿½
 
 #define M6020_FunGroundInit        \
     {                              \
@@ -41,37 +41,37 @@
 
 typedef struct
 {
-	  uint16_t motor_id;
-    uint16_t realAngle;  //¶Á»ØÀ´µÄ»úÐµ½Ç¶È
-    int32_t realSpeed;   //¶Á»ØÀ´µÄËÙ¶È
-    int16_t realCurrent; //¶Á»ØÀ´µÄÊµ¼Ê×ª¾ØµçÁ÷
-    uint8_t temperture;  //¶Á»ØÀ´µÄµç»úÎÂ¶È
-    uint16_t lastAngle;  //ÉÏ´ÎµÄ½Ç¶È
+	uint16_t motor_id;
+    uint16_t realAngle;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ðµï¿½Ç¶ï¿½
+    int32_t realSpeed;   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
+    int16_t realCurrent; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½×ªï¿½Øµï¿½ï¿½ï¿½
+    uint8_t temperture;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½Â¶ï¿½
+    uint16_t lastAngle;  //ï¿½Ï´ÎµÄ½Ç¶ï¿½
 	
-    float targetSpeed; //Ä¿±êËÙ¶È
-    int32_t targetAngle; //Ä¿±ê½Ç¶È
+    float targetSpeed; //Ä¿ï¿½ï¿½ï¿½Ù¶ï¿½
+    int32_t targetAngle; //Ä¿ï¿½ï¿½Ç¶ï¿½
 	
-    int16_t turnCount;   //×ª¹ýµÄÈ¦Êý
-    float totalAngle;  //ÀÛ»ý×Ü¹²½Ç¶È
+    int16_t turnCount;   //×ªï¿½ï¿½ï¿½ï¿½È¦ï¿½ï¿½
+    float totalAngle;  //ï¿½Û»ï¿½ï¿½Ü¹ï¿½ï¿½Ç¶ï¿½
 
-    int16_t outCurrent; //Êä³öµçÁ÷
+    int16_t outCurrent; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    uint8_t InfoUpdateFlag;   //ÐÅÏ¢¶ÁÈ¡¸üÐÂ±êÖ¾
-    uint16_t InfoUpdateFrame; //Ö¡ÂÊ
-    uint8_t OffLineFlag;      //Éè±¸ÀëÏß±êÖ¾
+    uint8_t InfoUpdateFlag;   //ï¿½ï¿½Ï¢ï¿½ï¿½È¡ï¿½ï¿½ï¿½Â±ï¿½Ö¾
+    uint16_t InfoUpdateFrame; //Ö¡ï¿½ï¿½
+    uint8_t OffLineFlag;      //ï¿½è±¸ï¿½ï¿½ï¿½ß±ï¿½Ö¾
 	
-	  positionpid_t l_pid_object;
-	  positionpid_t v_pid_object;
+	positionpid_t l_pid_object;
+	positionpid_t v_pid_object;
 		
 } M6020s_t;
 
 typedef enum
 {
-    //ÐèÒª×¢ÒâÓë±¨ÎÄ½ÓÊÜº¯Êý´¦¶ÔÓ¦¡£¼´
+    //ï¿½ï¿½Òª×¢ï¿½ï¿½ï¿½ë±¨ï¿½Ä½ï¿½ï¿½Üºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½
     //M6020_PITCH_Right = 0,
-	  M6020_Chassis1 = 0,
-	  M6020_Chassis2,
-	  Totalnum
+	M6020_Chassis1 = 0,
+	M6020_Chassis2,
+	Totalnum
 }M6020Name_e;
 
 typedef struct
@@ -83,12 +83,12 @@ typedef struct
 	
 } M6020_Fun_t;
 
-/********È«¾Ö±äÁ¿ÉùÃ÷********/
+/********È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½********/
 extern M6020s_t M6020s_Chassis1;
 extern M6020s_t M6020s_Chassis2;
 extern M6020_Fun_t M6020_Fun;
 
-/********º¯ÊýÉùÃ÷********/
+/********ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½********/
 void M6020_Init(M6020s_t *motor, uint16_t _motor_id);
 void M6020_setVoltage(int16_t uq1, int16_t uq2, int16_t uq3, int16_t uq4, uint8_t *data);
 void M6020_getInfo(Can_Export_Data_t RxMessage);

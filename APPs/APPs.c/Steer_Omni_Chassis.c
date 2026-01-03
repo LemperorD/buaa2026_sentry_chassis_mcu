@@ -15,10 +15,13 @@ int8_t dirt[2] = {-1,1};
 positionpid_t chassis_follow;
 positionpid_t cloud_follow;
 int8_t follow=1;
+
 int32_t flag_angletocloud=0;
 int32_t flag_Angle_ChassisToCloud=0;
-int32_t flag_angle_hd=0;
+fp32 flag_angle_hd=0;
+
 extern float spinning_vz;
+
 /**
  * @brief �Ƕȷ�Χ������
  * @param ������ĽǶ�ֵ
@@ -46,24 +49,28 @@ fp64 Angle_Limit(fp64 angle,fp64 max)
 void Chassis_Init(void)
 {
     M3508_Init(&M3508_Array[0],0x201);
-	  M3508_Init(&M3508_Array[1],0x202);
+	M3508_Init(&M3508_Array[1],0x202);
     M3508_Init(&M3508_Array[2],0x203);
-	  M3508_Init(&M3508_Array[3],0x204);
+	M3508_Init(&M3508_Array[3],0x204);
+
     M6020_Init(&M6020s_Chassis1,0x206);
     M6020_Init(&M6020s_Chassis2,0x207);
 
     //��������ٶȻ���ʼ��
     Position_PIDInit(&(M3508_Array[0].v_pid_object),10.0f, 0.22f, 0,0,8000,30000,6000);
-		Position_PIDInit(&(M3508_Array[1].v_pid_object),10.0f, 0.22f, 0,0,8000,30000,6000);
-		Position_PIDInit(&(M3508_Array[2].v_pid_object),10.0f, 0.22f, 0,0,8000,30000,6000);
-		Position_PIDInit(&(M3508_Array[3].v_pid_object),10.0f, 0.22f, 0,0,8000,30000,6000);
+	Position_PIDInit(&(M3508_Array[1].v_pid_object),10.0f, 0.22f, 0,0,8000,30000,6000);
+	Position_PIDInit(&(M3508_Array[2].v_pid_object),10.0f, 0.22f, 0,0,8000,30000,6000);
+	Position_PIDInit(&(M3508_Array[3].v_pid_object),10.0f, 0.22f, 0,0,8000,30000,6000);
+
     //ת�����ٶȻ���ʼ��
   	Position_PIDInit(&(M6020s_Chassis1.v_pid_object),100,0,55,0,7000,30000,6000);
     Position_PIDInit(&(M6020s_Chassis2.v_pid_object),100,0,55,0,7000,30000,6000);
     //ת����λ�û���ʼ��
-		Position_PIDInit(&(M6020s_Chassis1.l_pid_object),0.5f, 0.000001f, 0.05, 0, 30000, 10000 ,10000);
-		Position_PIDInit(&(M6020s_Chassis2.l_pid_object),0.5f, 0.000001f, 0.05, 0, 30000, 10000 ,10000);
+	Position_PIDInit(&(M6020s_Chassis1.l_pid_object),0.5f, 0.000001f, 0.05, 0, 30000, 10000 ,10000);
+	Position_PIDInit(&(M6020s_Chassis2.l_pid_object),0.5f, 0.000001f, 0.05, 0, 30000, 10000 ,10000);
+
     Position_PIDInit(&(chassis_follow), 0.20f, 0.0000005f, 0.04f, 0, 1000, 10000 , 6000);
+
     M3508_Array[0].targetSpeed = 0.0f;
     M3508_Array[1].targetSpeed = 0.0f;
     M3508_Array[2].targetSpeed = 0.0f;
@@ -71,7 +78,6 @@ void Chassis_Init(void)
 
     M6020s_Chassis1.targetAngle = DIRMOTOR_LB_ANGLE;
     M6020s_Chassis2.targetAngle = DIRMOTOR_RB_ANGLE;
-
 }
 
 /**
@@ -82,7 +88,7 @@ void Chassis_Init(void)
 void v_cloud_convertto_chassis(fp32 angle)
 {
     fp32 angle_hd = angle *pi / 180;
-	  flag_angle_hd=angle_hd;
+	flag_angle_hd=angle_hd;
     Steer_Omni_Data.Speed_ToChassis.vx =Steer_Omni_Data.Speed_ToCloud.vx * cos(angle_hd) -Steer_Omni_Data.Speed_ToCloud.vy * sin(angle_hd);
     Steer_Omni_Data.Speed_ToChassis.vy =(-1)*Steer_Omni_Data.Speed_ToCloud.vx * sin(angle_hd)-Steer_Omni_Data.Speed_ToCloud.vy * cos(angle_hd);
     Steer_Omni_Data.Speed_ToChassis.wz =Steer_Omni_Data.Speed_ToCloud.wz*0.6;
@@ -99,7 +105,7 @@ void chassis_follow_mode_chassis(float angle, uint8_t start_flag)
 {
     if(start_flag)
     {
-			//使底盘转动到正方向对应的编码值在云台对应的位置
+		//使底盘转动到正方向对应的编码值在云台对应的位置
         if(fabs(angle)<10)
         {
             return ;
@@ -111,7 +117,7 @@ void cloud_follow_mode_chassis(float angle, uint8_t start_flag)
 {
     if(start_flag)
     {
-			//使云台跟着底盘转动
+		//使云台跟着底盘转动
         if(fabs(angle)<10)
         {
             return ;
@@ -136,7 +142,7 @@ void Set_Chassis_Speed_From_UpperCom(void)
             Steer_Omni_Data.Speed_ToChassis.vx = chassis_coordinate_vx;
             Steer_Omni_Data.Speed_ToChassis.vy = chassis_coordinate_vy;
             Steer_Omni_Data.Speed_ToChassis.wz = chassis_coordinate_vz;
-				    cloud_follow_mode_chassis(Steer_Omni_Data.Angle_ChassisToCloud,follow);
+			cloud_follow_mode_chassis(Steer_Omni_Data.Angle_ChassisToCloud,follow);
             break;
             
         case SPINNING_MODE: // 小陀螺模式
@@ -176,8 +182,6 @@ void Set_Chassis_Speed_From_UpperCom(void)
     spinning_vz = Steer_Omni_Data.Speed_ToChassis.wz;
 }
 
-
-
 void choose_UpperComorDT7(void)
 {
 	if(choose_UpperComorDT7_flag)
@@ -187,7 +191,7 @@ void choose_UpperComorDT7(void)
 	else
 	{
 		v_cloud_convertto_chassis(Steer_Omni_Data.Angle_ChassisToCloud);  //遥控器控制模式下的底盘速度设定
-	  //chassis_follow_mode_chassis(Steer_Omni_Data.Angle_ChassisToCloud,follow);
+	    // chassis_follow_mode_chassis(Steer_Omni_Data.Angle_ChassisToCloud,follow);
 	}
 }
 
@@ -207,58 +211,57 @@ void direction_motor_angle_set(void)
         atan_angle[0] = atan2(((Steer_Omni_Data.Speed_ToChassis).vy - (Steer_Omni_Data.Speed_ToChassis).wz * Radius * 0.707107f),((Steer_Omni_Data.Speed_ToChassis).vx + (Steer_Omni_Data.Speed_ToChassis).wz * Radius * 0.707107f)) * 180.0f / pi ;
         atan_angle[1] = atan2(((Steer_Omni_Data.Speed_ToChassis).vy - (Steer_Omni_Data.Speed_ToChassis).wz * Radius * 0.707107f),((Steer_Omni_Data.Speed_ToChassis).vx - (Steer_Omni_Data.Speed_ToChassis).wz * Radius * 0.707107f)) * 180.0f / pi ;        
     
-			  finall_angle[0] = atan_angle[0]/360*8192 + DIRMOTOR_LB_ANGLE ;
-				finall_angle[1] = atan_angle[1]/360*8192 + DIRMOTOR_RB_ANGLE ;
-			
-				error_angle[0] =finall_angle[0] - M6020s_Chassis1.realAngle;
-				error_angle[1] =finall_angle[1] - M6020s_Chassis2.realAngle;
-				
-				if(error_angle[0]>4096.0f)
-				{
-						error_angle[0]-=8192.0f;
-				}
-				else if(error_angle[0]<-4096.0f)
-				{
-						error_angle[0]+=8192.0f;
-				}
-				if(error_angle[1]>4096.0f)
-				{
-						error_angle[1]-=8192.0f;
-				}
-				else if(error_angle[1]<-4096.0f)
-				{
-						error_angle[1]+=8192.0f;
-				}
-				
-				if(fabs(error_angle[0])>2048.0f)
-				{
-						dirt[0]=1;
-						finall_angle[0]-=4096.0f;
-				}
-				else
-				{
-						dirt[0]=-1;
-				}
-				if(fabs(error_angle[1])>2048.0f)
-				{
-						dirt[1]=-1;
-						finall_angle[1]-=4096.0f;
-				}
-				else
-				{
-						dirt[1]=1;
-				}
-		}
+		finall_angle[0] = atan_angle[0]/360*8192 + DIRMOTOR_LB_ANGLE ;
+        finall_angle[1] = atan_angle[1]/360*8192 + DIRMOTOR_RB_ANGLE ;
+    
+        error_angle[0] =finall_angle[0] - M6020s_Chassis1.realAngle;
+        error_angle[1] =finall_angle[1] - M6020s_Chassis2.realAngle;
+        
+        if(error_angle[0]>4096.0f)
+        {
+            error_angle[0]-=8192.0f;
+        }
+        else if(error_angle[0]<-4096.0f)
+        {
+            error_angle[0]+=8192.0f;
+        }
+        if(error_angle[1]>4096.0f)
+        {
+            error_angle[1]-=8192.0f;
+        }
+        else if(error_angle[1]<-4096.0f)
+        {
+            error_angle[1]+=8192.0f;
+        }
+        
+        if(fabs(error_angle[0])>2048.0f)
+        {
+            dirt[0]=1;
+            finall_angle[0]-=4096.0f;
+        }
+        else
+        {
+            dirt[0]=-1;
+        }
+        if(fabs(error_angle[1])>2048.0f)
+        {
+            dirt[1]=-1;
+            finall_angle[1]-=4096.0f;
+        }
+        else
+        {
+            dirt[1]=1;
+        }
+	}
     else
     {
         atan_angle[0] = 0.0f;
         atan_angle[1] = 0.0f;
-				dirt[1]=1;
-				dirt[0]=-1;
-			  finall_angle[0] = atan_angle[0]/360*8192 + DIRMOTOR_LB_ANGLE ;
-	      finall_angle[1] = atan_angle[1]/360*8192 + DIRMOTOR_RB_ANGLE ;
+		dirt[1]=1;
+		dirt[0]=-1;
+		finall_angle[0] = atan_angle[0]/360*8192 + DIRMOTOR_LB_ANGLE ;
+	    finall_angle[1] = atan_angle[1]/360*8192 + DIRMOTOR_RB_ANGLE ;
     }
-
 
     Steer_Omni_Data.M6020_Setposition[0] = finall_angle[0] ;
     Steer_Omni_Data.M6020_Setposition[1] = finall_angle[1] ;
@@ -300,27 +303,28 @@ void chassis_target_calc(void)
 {
 	choose_UpperComorDT7();
 	direction_motor_angle_set();
-  move_motor_speed_set();
+    move_motor_speed_set();
 	
     //ת����Ŀ��λ������
     M6020s_Chassis1.targetAngle = Steer_Omni_Data.M6020_Setposition[0];
     M6020s_Chassis2.targetAngle = Steer_Omni_Data.M6020_Setposition[1];
-	  if( M6020s_Chassis1.targetAngle < 0 )
-		{
-			M6020s_Chassis1.targetAngle += 8192 ; 
-		}
-		else if ( M6020s_Chassis1.targetAngle > 8192 )
-		{
-			M6020s_Chassis1.targetAngle -= 8192 ;
-		}
-		if( M6020s_Chassis2.targetAngle < 0 )
-		{
-			M6020s_Chassis2.targetAngle += 8192 ; 
-		}
-		else if ( M6020s_Chassis2.targetAngle > 8192 )
-		{
-			M6020s_Chassis2.targetAngle -= 8192 ;
-		}
+
+	if( M6020s_Chassis1.targetAngle < 0 )
+    {
+        M6020s_Chassis1.targetAngle += 8192 ; 
+    }
+    else if ( M6020s_Chassis1.targetAngle > 8192 )
+    {
+        M6020s_Chassis1.targetAngle -= 8192 ;
+    }
+    if( M6020s_Chassis2.targetAngle < 0 )
+    {
+        M6020s_Chassis2.targetAngle += 8192 ; 
+    }
+    else if ( M6020s_Chassis2.targetAngle > 8192 )
+    {
+        M6020s_Chassis2.targetAngle -= 8192 ;
+    }
 		
     //�������Ŀ���ٶ�����
     M3508_Array[0].targetSpeed = Steer_Omni_Data.M3508_Setspeed[0];
@@ -352,9 +356,9 @@ void Steer_Omni_Chassis_Out(void)
     Can_Fun.CAN_SendData(CAN_SendHandle,&hcan1,CAN_ID_STD,0x200,CAN1_0x200_Tx_Data);
     Can_Fun.CAN_SendData(CAN_SendHandle,&hcan2,CAN_ID_STD,0x1ff,CAN2_0x1ff_Tx_Data);
 			/***************************½«µçÁ÷²ÎÊý·¢ËÍ¸øµç»ú*******************************/
-		uint8_t data[8] = {0};
-		DM_setParameter(J6006s_Yaw.outPosition, J6006s_Yaw.outSpeed, J6006s_Yaw.outKp, J6006s_Yaw.outKd, J6006s_Yaw.outTorque,J6006_MaxP,J6006_MaxV,J6006_MaxT, data);
-		Can_Fun.CAN_SendData(CAN_SendHandle, &hcan2, CAN_ID_STD, J6006_SENDID_Yaw, data);
+	uint8_t data[8] = {0};
+	DM_setParameter(J6006s_Yaw.outPosition, J6006s_Yaw.outSpeed, J6006s_Yaw.outKp, J6006s_Yaw.outKd, J6006s_Yaw.outTorque,J6006_MaxP,J6006_MaxV,J6006_MaxT, data);
+	Can_Fun.CAN_SendData(CAN_SendHandle, &hcan2, CAN_ID_STD, J6006_SENDID_Yaw, data);
 }
 
 /**
