@@ -136,7 +136,7 @@ void Cloud_Yaw_Angle_Set(void)
 	/**************************????Yaw6020???????????????????*****************************/
 	
 	chassis_follow_mode_cloud(follow_cloud);
-	static uint8_t time=5;
+	// static uint8_t time=5;
 	
 	while (Cloud.Target_Yaw > 8192)
 	{
@@ -164,9 +164,13 @@ void Cloud_Yaw_Angle_Set(void)
 	float Angle_Err_Yaw =  J6006s_Yaw.realAngle6006 - chassis_yaw_unwrapped;
 	/*Err??-4096 ~ 8192+4096???Target? 0 ~ 8191??????????????Err? -4096 ~ 4096 */
 	/*???????????????*/
-	while (Angle_Err_Yaw > 4096 )
+	while (Angle_Err_Yaw > 4096)
 	{
 		Angle_Err_Yaw -= 8192 ;
+	}
+	while (Angle_Err_Yaw < -4096)
+	{
+		Angle_Err_Yaw += 8192 ;
 	}
 	ControlMes.yaw_realAngle = Angle_Err_Yaw;
 	
@@ -176,9 +180,13 @@ void Cloud_Yaw_Angle_Set(void)
 	
 	
 	/*Derta???? -4096-8191 ~ 4096*/
-	while ( Delta_Yaw <=  -4096)
+	while ( Delta_Yaw < -4096)
 	{
 		Delta_Yaw +=8192;
+	}
+	while ( Delta_Yaw > 4096)
+	{
+		Delta_Yaw -=8192;
 	}
 
 	/*???????????????????????????????????????*/ /*Target_xxx????????*/
@@ -191,15 +199,15 @@ void Cloud_Yaw_Angle_Set(void)
 			// 	Delta_Yaw = 0;
 			// }
 			/*??????????*/
-		//   Delta_Yaw = One_Kalman_Filter(&Cloud_YawMotorAngle_Error_Kalman, Delta_Yaw);
-			if( time >= kk )
-			{
+			// Delta_Yaw = One_Kalman_Filter(&Cloud_YawMotorAngle_Error_Kalman, Delta_Yaw);
+			// if( time >= kk )
+			// {
 				J6006s_Yaw.outSpeed = Position_PID(&J6006s_YawOPID,  0 ,Delta_Yaw);	
-				time = 0;
-			}
+				// time = 0;
+			// }
 			J6006s_Yaw.outTorque = Position_PID_Yaw(&J6006s_YawIPID, &FuzzyPID_Yaw, J6006s_Yaw.outSpeed, J6006s_Yaw.realSpeed);
 			// J6006s_Yaw.outTorque = One_Kalman_Filter(&Cloud_YawCurrent_Kalman_manul, J6006s_Yaw.outTorque);
-			time ++;
+			// time ++;
 	// }
 	// else if(ControlMes.AutoAimFlag==1)
 	// {

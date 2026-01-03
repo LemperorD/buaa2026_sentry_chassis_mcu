@@ -116,20 +116,23 @@ void Board2_getChassisInfo(Can_Export_Data_t RxMessage)
 
 
 float debug_temp_little_yaw = 0.0f;
-float speed_nonlinear_function(float little_yaw_bias) {
-    float little_yaw_bias_degree = little_yaw_bias * 360 / 8192;
-    float little_yaw_bias_degree_sign = little_yaw_bias_degree > 0 ? 1.0 : -1.0;
-    float little_yaw_bias_degree_abs = fabs(little_yaw_bias_degree);
-    if (little_yaw_bias_degree_abs < 10) {
-        return 0.0;
+float little_to_big_yaw_pid(float bias) {
+    float kp = 1.0;
+    float ki = 0.3;
+    float kd = 0.1;
+    float integration_limit = 5000.0;
+    float integration_decay = 0.97;
+    static float last_bias = 0.0;
+    static float integration = 0.0;
+    if (integration > integration_limit) {
+        integration = integration_limit;
+    } else if (integration < -integration_limit) {
+        integration = -integration_limit;
     }
-    if (little_yaw_bias_degree_abs < 20) {
-        return ((little_yaw_bias_degree_abs - 10) * 1 * little_yaw_bias_degree_sign) * 8192 / 360;
-    }
-    if (little_yaw_bias_degree_abs < 30) {
-        return (((little_yaw_bias_degree_abs - 20) * 4 + 10) * little_yaw_bias_degree_sign) * 8192 / 360;
-    }
-    return (50 * little_yaw_bias_degree_sign) * 8192 / 360;
+    integration *= integration_decay;
+    float difference = last_bias - bias;
+    last_bias = bias;
+    return kp * bias + ki * integration + kd * difference;
 }
 void Board2_getGimbalInfo(Can_Export_Data_t RxMessage)
 {
@@ -161,7 +164,10 @@ void Board2_getGimbalInfo(Can_Export_Data_t RxMessage)
 		little_yaw_bias += 8192;
 	}
 
-    // Cloud.Target_Yaw += speed_nonlinear_function(little_yaw_bias) * 0.02;
+    if (fabs(little_yaw_bias) < 68.267) { // 左右3°以内不做跟随
+        little_yaw_bias = 0.0;
+    }
+    Cloud.Target_Yaw += little_to_big_yaw_pid(little_yaw_bias) * 0.02;
     
     // if(ControlMes.AutoAimFlag == 1)
     // {
